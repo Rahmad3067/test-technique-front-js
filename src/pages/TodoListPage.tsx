@@ -13,6 +13,17 @@ export const TodoListPage: React.FC = () => {
     (state: RootState) => state.getTodoList
   );
 
+
+
+  // we seperate all Todos into two diffrent groups based on their status and then displayed on two diffrent cards
+  // done created to filer all todos that their status are Done
+  const done = todos.filter((todo) => todo.status === "done");
+  // pending created to filer all todos that their status are pending
+  const pending = todos.filter((todo) => todo.status === "pending");
+
+
+
+
   useEffect(() => {
     if (!loading && !loaded && error == "") {
       dispatch(getTodoListRequest());
@@ -37,10 +48,15 @@ export const TodoListPage: React.FC = () => {
         {loading ? (
           <CircularProgress />
         ) : (
-          <div style={{ width: "100%" }}>
-            {todos.length > 0 && loaded ? (
-              todos.map((todo) => (
+          <div
+            style={{
+              width: "100%",
+            }}
+          >
+            {done.length > 0 && loaded ? (
+              done.map((todo) => (
                 <TodoComponent
+                  id={todo.id}
                   title={todo.title}
                   description={todo.description}
                   status={todo.status}
@@ -61,6 +77,28 @@ export const TodoListPage: React.FC = () => {
         >
           Add todo +
         </Button>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+            }}
+          >
+            {pending.length > 0 && loaded ? (
+              pending.map((todo) => (
+                <TodoComponent
+                  id={todo.id}
+                  title={todo.title}
+                  description={todo.description}
+                  status={todo.status}
+                />
+              ))
+            ) : (
+              <Typography>There is no todos to show.</Typography>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
